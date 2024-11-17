@@ -1,6 +1,7 @@
 import scrapy
 import re
 from webscraper.items import MangaItem
+from scrapy_playwright.page import PageMethod
 
 
 class AsuraSpider(scrapy.Spider):
@@ -65,4 +66,10 @@ class AsuraSpider(scrapy.Spider):
         if next_page:
             if not next_page.startswith("https://asuracomic.net"):
                 next_page = f"https://asuracomic.net{next_page}"
-            yield response.follow(next_page, self.parse)
+            yield scrapy.Request(next_page, meta=dict(
+                playwright = True,
+                playwright_page_methods = [
+                    PageMethod('wait_for_selector', self.manga_selector)
+                ],
+                handle_httpstatus_list = [500]
+            ))
