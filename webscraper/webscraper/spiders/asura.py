@@ -59,6 +59,8 @@ class AsuraSpider(scrapy.Spider):
                 url = f"https://asuracomic.net{url}"
             manga_item["url"] = url
             
+            manga_item["source"] = "asura"
+            
             yield manga_item
         
         # Pagination
